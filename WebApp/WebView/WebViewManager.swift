@@ -5,6 +5,7 @@ import WebKit
 final class WebViewManager: NSObject {
     let webView: WKWebView
     private var currentURL: URL?
+    private var jsBridge: JavaScriptBridge?
 
     override init() {
         let configuration = WKWebViewConfiguration()
@@ -18,6 +19,9 @@ final class WebViewManager: NSObject {
         webView.customUserAgent = Config.customUserAgent
 
         super.init()
+
+        jsBridge = JavaScriptBridge(webView: webView)
+        jsBridge?.register(in: configuration)
 
         webView.navigationDelegate = self
         webView.uiDelegate = self
