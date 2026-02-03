@@ -2,8 +2,7 @@ import AppKit
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    private var window: NSWindow?
-    private var mainViewController: MainViewController?
+    private var windowControllers: [WindowController] = []
     private var menuBuilder: MenuBuilder?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -28,19 +27,31 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func createMainWindow() {
         let contentRect = NSRect(x: 0, y: 0, width: Config.windowWidth, height: Config.windowHeight)
 
-        window = NSWindow(
+        let window = NSWindow(
             contentRect: contentRect,
             styleMask: [.titled, .closable, .miniaturizable, .resizable],
             backing: .buffered,
             defer: false
         )
 
-        mainViewController = MainViewController()
-        window?.contentViewController = mainViewController
-        window?.title = Config.appName
-        window?.minSize = NSSize(width: Config.minWindowWidth, height: Config.minWindowHeight)
-        window?.center()
-        window?.makeKeyAndOrderFront(nil)
+        let mainViewController = MainViewController()
+        window.contentViewController = mainViewController
+        window.title = Config.appName
+        window.minSize = NSSize(width: Config.minWindowWidth, height: Config.minWindowHeight)
+
+        let windowController = WindowController(window: window)
+        windowController.contentViewController = mainViewController
+        window.delegate = windowController
+        windowControllers.append(windowController)
+
+        windowController.showWindow(nil)
+    }
+
+    private var currentMainViewController: MainViewController? {
+        if let windowController = NSApp.keyWindow?.windowController as? WindowController {
+            return windowController.contentViewController as? MainViewController
+        }
+        return windowControllers.first?.contentViewController as? MainViewController
     }
 
     @objc func newWindow(_ sender: Any?) {
@@ -48,12 +59,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func reloadPage(_ sender: Any?) {
-        mainViewController?.reload()
+        currentMainViewController?.reload()
     }
 
     @objc func openDevTools(_ sender: Any?) {
         #if DEBUG
-        if let webView = mainViewController?.webView {
+        if let webView = currentMainViewController?.webView {
             webView.evaluateJavaScript("console.log('Developer Tools opened via menu')")
         }
         #endif

@@ -15,6 +15,7 @@
 		AAA00007001 /* WebViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00007000 /* WebViewManager.swift */; };
 		AAA00009001 /* MenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00009000 /* MenuBuilder.swift */; };
 		AAA0000A001 /* JavaScriptBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA0000A000 /* JavaScriptBridge.swift */; };
+		AAA0000B001 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA0000B000 /* WindowController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 		AAA00008000 /* WebApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WebApp.entitlements; sourceTree = "<group>"; };
 		AAA00009000 /* MenuBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBuilder.swift; sourceTree = "<group>"; };
 		AAA0000A000 /* JavaScriptBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JavaScriptBridge.swift; sourceTree = "<group>"; };
+		AAA0000B000 /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				AAA00006000 /* MainViewController.swift */,
+				AAA0000B000 /* WindowController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -191,6 +194,7 @@
 				AAA00007001 /* WebViewManager.swift in Sources */,
 				AAA00009001 /* MenuBuilder.swift in Sources */,
 				AAA0000A001 /* JavaScriptBridge.swift in Sources */,
+				AAA0000B001 /* WindowController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
