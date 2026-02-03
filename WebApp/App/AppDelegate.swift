@@ -4,8 +4,10 @@ import AppKit
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var window: NSWindow?
     private var mainViewController: MainViewController?
+    private var menuBuilder: MenuBuilder?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        setupMenu()
         createMainWindow()
         NSApp.activate(ignoringOtherApps: true)
     }
@@ -16,6 +18,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
+    }
+
+    private func setupMenu() {
+        menuBuilder = MenuBuilder(appDelegate: self)
+        NSApp.mainMenu = menuBuilder?.buildMainMenu()
     }
 
     private func createMainWindow() {
@@ -34,5 +41,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         window?.minSize = NSSize(width: Config.minWindowWidth, height: Config.minWindowHeight)
         window?.center()
         window?.makeKeyAndOrderFront(nil)
+    }
+
+    @objc func newWindow(_ sender: Any?) {
+        createMainWindow()
+    }
+
+    @objc func reloadPage(_ sender: Any?) {
+        mainViewController?.reload()
+    }
+
+    @objc func openDevTools(_ sender: Any?) {
+        #if DEBUG
+        if let webView = mainViewController?.webView {
+            webView.evaluateJavaScript("console.log('Developer Tools opened via menu')")
+        }
+        #endif
     }
 }
