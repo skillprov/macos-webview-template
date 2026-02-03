@@ -1,7 +1,9 @@
 import AppKit
 
+@MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var window: NSWindow?
+    private var mainViewController: MainViewController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         createMainWindow()
@@ -26,6 +28,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             defer: false
         )
 
+        mainViewController = MainViewController()
+        window?.contentViewController = mainViewController
         window?.title = Config.appName
         window?.minSize = NSSize(width: Config.minWindowWidth, height: Config.minWindowHeight)
         window?.center()
