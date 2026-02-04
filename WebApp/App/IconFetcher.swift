@@ -18,6 +18,9 @@ final class IconFetcher {
     func loadIcon() {
         if let cachedIcon = loadCachedIcon() {
             NSApp.applicationIconImage = cachedIcon
+            // Ensure bundle icon is set for Dock persistence
+            let bundlePath = Bundle.main.bundlePath
+            NSWorkspace.shared.setIcon(cachedIcon, forFile: bundlePath, options: [])
             return
         }
 
@@ -236,6 +239,10 @@ final class IconFetcher {
             return
         }
         try? pngData.write(to: cachedIconURL)
+
+        // Set icon on app bundle for Dock persistence
+        let bundlePath = Bundle.main.bundlePath
+        NSWorkspace.shared.setIcon(image, forFile: bundlePath, options: [])
     }
 
     func clearCache() {
