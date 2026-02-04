@@ -7,11 +7,13 @@ enum Config {
     static let bundleIdentifier = "com.example.webapp"
 
     // MARK: - Web Configuration
-    static let homeURL = URL(string: "https://example.com")!
+    static let homeURL = URL(string: "https://www.google.com")!  // Change this to your app's URL
     static let allowedDomains: [String] = [
-        "example.com"
+        "google.com",  // Change these to your app's domains
+        "www.google.com",
+        "accounts.google.com"
     ]
-    static let customUserAgent = "WebApp/1.0 (macOS)"
+    static let customUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15"
 
     // MARK: - Window Configuration
     static let windowWidth: CGFloat = 1200

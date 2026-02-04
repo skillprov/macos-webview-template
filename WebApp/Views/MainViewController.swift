@@ -6,7 +6,7 @@ final class MainViewController: NSViewController {
     private let webViewManager = WebViewManager()
 
     override func loadView() {
-        view = NSView()
+        view = NSView(frame: NSRect(x: 0, y: 0, width: Config.windowWidth, height: Config.windowHeight))
     }
 
     override func viewDidLoad() {

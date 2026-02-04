@@ -1,5 +1,5 @@
 import AppKit
-import WebKit
+@preconcurrency import WebKit
 
 @MainActor
 final class WebViewManager: NSObject {
@@ -28,7 +28,9 @@ final class WebViewManager: NSObject {
 
         #if DEBUG
         if Config.enableDevTools {
-            webView.isInspectable = true
+            if #available(macOS 13.3, *) {
+                webView.isInspectable = true
+            }
         }
         #endif
 
@@ -148,7 +150,7 @@ final class WebViewManager: NSObject {
 }
 
 extension WebViewManager: WKNavigationDelegate {
-    nonisolated func webView(
+    func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
@@ -159,37 +161,30 @@ extension WebViewManager: WKNavigationDelegate {
             return
         }
 
-        MainActor.assumeIsolated {
-            if isAllowedDomain(host) {
-                decisionHandler(.allow)
-            } else {
-                decisionHandler(.cancel)
-                openInExternalBrowser(url)
-            }
+        if isAllowedDomain(host) {
+            decisionHandler(.allow)
+        } else {
+            decisionHandler(.cancel)
+            openInExternalBrowser(url)
         }
     }
 
-    nonisolated func webView(
+    func webView(
         _ webView: WKWebView,
         didFailProvisionalNavigation navigation: WKNavigation!,
         withError error: Error
     ) {
-        Task { @MainActor in
-            handleNavigationError(error)
-        }
+        handleNavigationError(error)
     }
 
-    nonisolated func webView(
+    func webView(
         _ webView: WKWebView,
         didFail navigation: WKNavigation!,
         withError error: Error
     ) {
-        Task { @MainActor in
-            handleNavigationError(error)
-        }
+        handleNavigationError(error)
     }
 
-    @MainActor
     private func handleNavigationError(_ error: Error) {
         let nsError = error as NSError
 
@@ -223,19 +218,17 @@ extension WebViewManager: WKNavigationDelegate {
 }
 
 extension WebViewManager: WKUIDelegate {
-    nonisolated func webView(
+    func webView(
         _ webView: WKWebView,
         createWebViewWith configuration: WKWebViewConfiguration,
         for navigationAction: WKNavigationAction,
         windowFeatures: WKWindowFeatures
     ) -> WKWebView? {
         if let url = navigationAction.request.url {
-            MainActor.assumeIsolated {
-                if let host = url.host, isAllowedDomain(host) {
-                    webView.load(navigationAction.request)
-                } else {
-                    openInExternalBrowser(url)
-                }
+            if let host = url.host, isAllowedDomain(host) {
+                webView.load(navigationAction.request)
+            } else {
+                openInExternalBrowser(url)
             }
         }
         return nil

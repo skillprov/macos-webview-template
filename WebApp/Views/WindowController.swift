@@ -65,21 +65,15 @@ final class WindowController: NSWindowController {
 }
 
 extension WindowController: NSWindowDelegate {
-    nonisolated func windowWillClose(_ notification: Notification) {
-        Task { @MainActor in
-            saveWindowFrame()
-        }
+    func windowWillClose(_ notification: Notification) {
+        saveWindowFrame()
     }
 
-    nonisolated func windowDidResize(_ notification: Notification) {
-        Task { @MainActor in
-            saveWindowFrame()
-        }
+    func windowDidResize(_ notification: Notification) {
+        saveWindowFrame()
     }
 
-    nonisolated func windowDidMove(_ notification: Notification) {
-        Task { @MainActor in
-            saveWindowFrame()
-        }
+    func windowDidMove(_ notification: Notification) {
+        saveWindowFrame()
     }
 }

@@ -1,6 +1,6 @@
 import AppKit
 import WebKit
-import UserNotifications
+@preconcurrency import UserNotifications
 import UniformTypeIdentifiers
 
 @MainActor
@@ -165,7 +165,7 @@ final class JavaScriptBridge: NSObject {
 }
 
 extension JavaScriptBridge: WKScriptMessageHandler {
-    nonisolated func userContentController(
+    func userContentController(
         _ userContentController: WKUserContentController,
         didReceive message: WKScriptMessage
     ) {
@@ -176,9 +176,6 @@ extension JavaScriptBridge: WKScriptMessageHandler {
         }
 
         let payload = body["payload"] as? [String: Any] ?? [:]
-
-        Task { @MainActor in
-            handleAction(action, payload: payload, requestId: requestId)
-        }
+        handleAction(action, payload: payload, requestId: requestId)
     }
 }
