@@ -16,6 +16,7 @@
 		AAA00009001 /* MenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA00009000 /* MenuBuilder.swift */; };
 		AAA0000A001 /* JavaScriptBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA0000A000 /* JavaScriptBridge.swift */; };
 		AAA0000B001 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA0000B000 /* WindowController.swift */; };
+		AAA0000C001 /* IconFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA0000C000 /* IconFetcher.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		AAA00009000 /* MenuBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBuilder.swift; sourceTree = "<group>"; };
 		AAA0000A000 /* JavaScriptBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JavaScriptBridge.swift; sourceTree = "<group>"; };
 		AAA0000B000 /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
+		AAA0000C000 /* IconFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconFetcher.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 				AAA00001000 /* main.swift */,
 				AAA00002000 /* AppDelegate.swift */,
 				AAA00009000 /* MenuBuilder.swift */,
+				AAA0000C000 /* IconFetcher.swift */,
 				AAA00005000 /* Info.plist */,
 			);
 			path = App;
@@ -195,6 +198,7 @@
 				AAA00009001 /* MenuBuilder.swift in Sources */,
 				AAA0000A001 /* JavaScriptBridge.swift in Sources */,
 				AAA0000B001 /* WindowController.swift in Sources */,
+				AAA0000C001 /* IconFetcher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

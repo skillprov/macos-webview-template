@@ -5,10 +5,10 @@ A native macOS WebView wrapper template for creating web app wrappers. Built wit
 ## Features
 
 - **WKWebView Integration**: Modern web content display with JavaScript support
+- **Auto Icon Fetching**: Automatically fetches and caches the website's icon for the dock
 - **Domain Whitelisting**: Control which domains can be loaded in-app; external links open in browser
 - **JavaScript Bridge**: Bidirectional communication between web content and native Swift
 - **Full Menu Bar**: Standard macOS menus with keyboard shortcuts
-- **Window State Persistence**: Remembers window position and size across sessions
 - **Network Error Handling**: Friendly error pages with auto-retry on reconnection
 - **Dark Mode Support**: Error pages adapt to system appearance
 - **Web Inspector**: Debug tools available in development builds

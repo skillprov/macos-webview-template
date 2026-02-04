@@ -5,8 +5,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var window: NSWindow?
     private var mainViewController: MainViewController?
     private var menuBuilder: MenuBuilder?
+    private let iconFetcher = IconFetcher()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        iconFetcher.loadIcon()
         setupMenu()
         createMainWindow()
         NSApp.activate(ignoringOtherApps: true)
