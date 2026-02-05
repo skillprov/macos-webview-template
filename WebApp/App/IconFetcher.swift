@@ -233,7 +233,10 @@ final class IconFetcher {
     }
 
     private func saveToCache(_ image: NSImage) {
-        guard let tiffData = image.tiffRepresentation,
+        // Apply macOS-style rounded corners (superellipse)
+        let maskedImage = applyMacOSIconMask(to: image)
+
+        guard let tiffData = maskedImage.tiffRepresentation,
               let bitmap = NSBitmapImageRep(data: tiffData),
               let pngData = bitmap.representation(using: .png, properties: [:]) else {
             return
@@ -242,7 +245,79 @@ final class IconFetcher {
 
         // Set icon on app bundle for Dock persistence
         let bundlePath = Bundle.main.bundlePath
-        NSWorkspace.shared.setIcon(image, forFile: bundlePath, options: [])
+        NSWorkspace.shared.setIcon(maskedImage, forFile: bundlePath, options: [])
+    }
+
+    private func applyMacOSIconMask(to image: NSImage) -> NSImage {
+        let size: CGFloat = 1024  // Standard macOS icon size
+        let rect = NSRect(x: 0, y: 0, width: size, height: size)
+
+        let maskedImage = NSImage(size: NSSize(width: size, height: size))
+        maskedImage.lockFocus()
+
+        // Create the macOS superellipse (squircle) path
+        // macOS uses a continuous curve with ~22.37% corner radius
+        let path = createSuperellipsePath(in: rect, cornerRadius: size * 0.2237)
+        path.addClip()
+
+        // Draw the original image scaled to fill
+        image.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1.0)
+
+        maskedImage.unlockFocus()
+        return maskedImage
+    }
+
+    private func createSuperellipsePath(in rect: NSRect, cornerRadius: CGFloat) -> NSBezierPath {
+        // macOS uses a continuous curve (superellipse/squircle), not simple rounded corners
+        // This approximates the iOS/macOS icon shape using cubic bezier curves
+        let path = NSBezierPath()
+
+        let width = rect.width
+        let height = rect.height
+        let x = rect.origin.x
+        let y = rect.origin.y
+
+        // Control point factor for superellipse approximation
+        let k: CGFloat = cornerRadius * 0.552284749831  // Magic number for circle approximation
+        let r = cornerRadius
+
+        // Start at top-left, after the corner
+        path.move(to: NSPoint(x: x + r, y: y + height))
+
+        // Top edge
+        path.line(to: NSPoint(x: x + width - r, y: y + height))
+
+        // Top-right corner (superellipse curve)
+        path.curve(to: NSPoint(x: x + width, y: y + height - r),
+                   controlPoint1: NSPoint(x: x + width - r + k, y: y + height),
+                   controlPoint2: NSPoint(x: x + width, y: y + height - r + k))
+
+        // Right edge
+        path.line(to: NSPoint(x: x + width, y: y + r))
+
+        // Bottom-right corner
+        path.curve(to: NSPoint(x: x + width - r, y: y),
+                   controlPoint1: NSPoint(x: x + width, y: y + r - k),
+                   controlPoint2: NSPoint(x: x + width - r + k, y: y))
+
+        // Bottom edge
+        path.line(to: NSPoint(x: x + r, y: y))
+
+        // Bottom-left corner
+        path.curve(to: NSPoint(x: x, y: y + r),
+                   controlPoint1: NSPoint(x: x + r - k, y: y),
+                   controlPoint2: NSPoint(x: x, y: y + r - k))
+
+        // Left edge
+        path.line(to: NSPoint(x: x, y: y + height - r))
+
+        // Top-left corner
+        path.curve(to: NSPoint(x: x + r, y: y + height),
+                   controlPoint1: NSPoint(x: x, y: y + height - r + k),
+                   controlPoint2: NSPoint(x: x + r - k, y: y + height))
+
+        path.close()
+        return path
     }
 
     func clearCache() {
